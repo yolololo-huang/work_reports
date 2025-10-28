@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="yolohuang" />
+
+<meta name="date" content="2025-10-22" />
+
+<title>bulk-RNAseq downstream - YSZ</title>
+
+<script src="bulkSeq_downstream_2_files/header-attrs-2.29/header-attrs.js"></script>
+<script src="bulkSeq_downstream_2_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="bulkSeq_downstream_2_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="bulkSeq_downstream_2_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="bulkSeq_downstream_2_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="bulkSeq_downstream_2_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="bulkSeq_downstream_2_files/navigation-1.1/tabsets.js"></script>
+<link href="bulkSeq_downstream_2_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="bulkSeq_downstream_2_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">bulk-RNAseq downstream - YSZ</h1>
+<h4 class="author">yolohuang</h4>
+<h4 class="date">2025-10-22</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#preparing-matrix" id="toc-preparing-matrix">1.Preparing
+matrix</a></li>
+<li><a href="#processing-for-degs" id="toc-processing-for-degs">2.
+Processing for DEGs</a>
+<ul>
+<li><a href="#sample-information" id="toc-sample-information">2.1 sample
+information</a></li>
+<li><a href="#processing-overview" id="toc-processing-overview">2.2
+processing overview</a></li>
+<li><a href="#deg-result" id="toc-deg-result">2.3 DEG result</a></li>
+</ul></li>
+<li><a href="#go" id="toc-go">GO</a></li>
+<li><a href="#kg" id="toc-kg">KG</a></li>
+<li><a href="#gsea" id="toc-gsea">GSEA</a></li>
+<li><a href="#further-analysis-placeholder"
+id="toc-further-analysis-placeholder">Further analysis
+placeholder</a></li>
+</ul>
+</div>
+
+<div id="preparing-matrix" class="section level2">
+<h2>1.Preparing matrix</h2>
+<p>TPM and FPKM matrix also have been converted.</p>
+<p>Expressions with duplicated symbols have been averaged. All type of
+gene has been keep without filtering:</p>
+<pre><code>## 
+##           3prime_overlapping_ncRNA                          antisense 
+##                                  2                               2304 
+##      bidirectional_promoter_lncRNA                          IG_C_gene 
+##                                 37                                 13 
+##                    IG_C_pseudogene                          IG_D_gene 
+##                                  1                                 19 
+##                    IG_D_pseudogene                          IG_J_gene 
+##                                  3                                 14 
+##                         IG_LV_gene                      IG_pseudogene 
+##                                  4                                  2 
+##                          IG_V_gene                    IG_V_pseudogene 
+##                                218                                155 
+##                            lincRNA                       macro_lncRNA 
+##                               3905                                  1 
+##                              miRNA                           misc_RNA 
+##                               2202                                563 
+##                            Mt_rRNA                            Mt_tRNA 
+##                                  2                                 22 
+##             polymorphic_pseudogene               processed_pseudogene 
+##                                 50                               6875 
+##               processed_transcript                     protein_coding 
+##                                753                              22021 
+##                         pseudogene                           ribozyme 
+##                                107                                 22 
+##                               rRNA                             scaRNA 
+##                                354                                 51 
+##                              scRNA                     sense_intronic 
+##                                  1                                265 
+##                  sense_overlapping                             snoRNA 
+##                                 25                               1508 
+##                              snRNA                               sRNA 
+##                               1382                                  2 
+##                                TEC                          TR_C_gene 
+##                               2564                                  8 
+##                          TR_D_gene                          TR_J_gene 
+##                                  4                                 70 
+##                    TR_J_pseudogene                          TR_V_gene 
+##                                 10                                144 
+##                    TR_V_pseudogene   transcribed_processed_pseudogene 
+##                                 34                                182 
+##     transcribed_unitary_pseudogene transcribed_unprocessed_pseudogene 
+##                                  5                                172 
+##                 unitary_pseudogene             unprocessed_pseudogene 
+##                                 20                               2344</code></pre>
+<p>Technical duplicated samples has been averaged. The total gene and
+samples are:</p>
+</div>
+<div id="processing-for-degs" class="section level2">
+<h2>2. Processing for DEGs</h2>
+<p>DEGs was processed refering to <a
+href="https://bioconductor.org/packages/release/workflows/vignettes/RNAseq123/inst/doc/limmaWorkflow.html">limma’s
+workflow</a></p>
+<div id="sample-information" class="section level3">
+<h3>2.1 sample information</h3>
+<table>
+<caption>Sample information</caption>
+<thead>
+<tr class="header">
+<th align="left">sample</th>
+<th align="left">group</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">liver116</td>
+<td align="left">Liver_KO</td>
+</tr>
+<tr class="even">
+<td align="left">liver139</td>
+<td align="left">Liver_WT</td>
+</tr>
+<tr class="odd">
+<td align="left">liver177</td>
+<td align="left">Liver_KO</td>
+</tr>
+<tr class="even">
+<td align="left">liver179</td>
+<td align="left">Liver_KO</td>
+</tr>
+<tr class="odd">
+<td align="left">liver47</td>
+<td align="left">Liver_WT</td>
+</tr>
+<tr class="even">
+<td align="left">tumor116</td>
+<td align="left">Tumor_KO</td>
+</tr>
+<tr class="odd">
+<td align="left">tumor139</td>
+<td align="left">Tumor_WT</td>
+</tr>
+<tr class="even">
+<td align="left">tumor177</td>
+<td align="left">Tumor_KO</td>
+</tr>
+<tr class="odd">
+<td align="left">tumor179</td>
+<td align="left">Tumor_KO</td>
+</tr>
+<tr class="even">
+<td align="left">tumor47</td>
+<td align="left">Tumor_WT</td>
+</tr>
+<tr class="odd">
+<td align="left">tumor97</td>
+<td align="left">Tumor_WT</td>
+</tr>
+<tr class="even">
+<td align="left">liver136</td>
+<td align="left">Liver_WT</td>
+</tr>
+<tr class="odd">
+<td align="left">liver164</td>
+<td align="left">Liver_ND</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="processing-overview" class="section level3">
+<h3>2.2 processing overview</h3>
+<p>Removing genes that are lowly expressed</p>
+<pre><code>## Warning in brewer.pal(nsamples, &quot;Paired&quot;): n too large, allowed maximum for palette Paired is 12
+## Returning the palette you asked for with that many colors</code></pre>
+<pre><code>## [1] 21230    13</code></pre>
+<p><img src="bulkSeq_downstream_2_files/figure-html/2.1%20Removing%20genes%20that%20are%20lowly%20expressed-1.png" width="672" /></p>
+<p>Scaling Normalization of expression:</p>
+<p><img src="bulkSeq_downstream_2_files/figure-html/2.2%20Normalising%20gene%20expression%20distributions-1.png" width="672" /></p>
+<p>Unsupervised clustering of samples:</p>
+<p><img src="bulkSeq_downstream_2_files/figure-html/2.3%20Unsupervised%20clustering%20of%20samples-1.png" width="672" /><img src="bulkSeq_downstream_2_files/figure-html/2.3%20Unsupervised%20clustering%20of%20samples-2.png" width="672" /><img src="bulkSeq_downstream_2_files/figure-html/2.3%20Unsupervised%20clustering%20of%20samples-3.png" width="672" /></p>
+</div>
+<div id="deg-result" class="section level3">
+<h3>2.3 DEG result</h3>
+<p>Paired-test.Flowing volcano plots as visualized using P value cutoff
+(&lt; 0.01) and fold change cutoff (&lt; 2). But obviously P value
+cutoff shows more DEGs. Fold change cutoff can be customized also.</p>
+<pre><code>##           Contrasts
+## Levels     Liver_KO_WT Tumor_KO_WT WT_Tumor_Liver KO_Tumor_Liver Liver_ND_WT
+##   Liver_KO           1           0              0             -1           0
+##   Liver_ND           0           0              0              0           1
+##   Liver_WT          -1           0             -1              0          -1
+##   Tumor_KO           0           1              0              1           0
+##   Tumor_WT           0          -1              1              0           0</code></pre>
+<p><img src="bulkSeq_downstream_2_files/figure-html/2.4%20paired-test-1.png" width="672" /></p>
+<iframe src="https://observablehq.com/embed/db5da493a35745f2@1136?cells=viewof+file%2Cdata2%2Cdata3%2Cchart" width="100%" height="1500" frameborder="0">
+</iframe>
+</div>
+</div>
+<div id="go" class="section level1">
+<h1>GO</h1>
+</div>
+<div id="kg" class="section level1">
+<h1>KG</h1>
+</div>
+<div id="gsea" class="section level1">
+<h1>GSEA</h1>
+</div>
+<div id="further-analysis-placeholder" class="section level1">
+<h1>Further analysis placeholder</h1>
+<p>I haven’t manage the following code. If you wanna further analysis
+plz fetch me ~~~</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
